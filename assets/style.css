@@ -209,6 +209,7 @@ main { padding-bottom: 3rem; }
 .feature-card,
 .edition-card,
 .trend-card,
+.step,
 .empty-card {
   background: var(--card);
   color: var(--ink);
@@ -385,15 +386,80 @@ main { padding-bottom: 3rem; }
 .footer-links a { color: var(--hero-text); font-weight: 700; }
 .footer-links a:hover { color: var(--fucsia); }
 
+/* ---- Página Sobre el proyecto ---- */
+.steps {
+  display: grid;
+  gap: 1rem;
+  counter-reset: step;
+  margin: 0;
+  list-style: none;
+  padding: 0;
+}
+
+.step {
+  position: relative;
+  padding: clamp(1rem, 3vw, 1.45rem) clamp(1rem, 3vw, 1.45rem) clamp(1rem, 3vw, 1.45rem) 3.6rem;
+}
+
+.step::before {
+  counter-increment: step;
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  left: 1.15rem;
+  top: 1.15rem;
+  font-weight: 900;
+  font-size: 1.5rem;
+  letter-spacing: -0.04em;
+  color: var(--fucsia);
+}
+
+.step h3 { margin: 0 0 0.45rem; color: var(--fucsia); font-weight: 900; letter-spacing: -0.03em; }
+.step p { margin: 0.3rem 0; }
+
+.about-code {
+  font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+  font-size: 0.82em;
+  background: var(--mint-soft);
+  color: var(--menta-deep);
+  padding: 0.1rem 0.35rem;
+  border-radius: 6px;
+  overflow-wrap: anywhere;
+}
+
+.about-arch {
+  display: grid;
+  gap: 0.6rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  font-weight: 700;
+}
+
+.about-arch li {
+  border-left: 3px solid var(--fucsia);
+  padding: 0.35rem 0.75rem;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 0 10px 10px 0;
+}
+
+.about-arch .about-code { background: transparent; padding: 0; }
+
+.about-note {
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
 @media (min-width: 720px) {
   .feature-card { grid-template-columns: minmax(0, 1.12fr) minmax(280px, 0.88fr); align-items: center; }
   .editions-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .trends-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (min-width: 1040px) {
   .trends-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .trend-card:nth-child(1), .trend-card:nth-child(4) { grid-column: span 2; }
+  .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 @media (prefers-reduced-motion: reduce) {

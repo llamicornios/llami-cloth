@@ -239,6 +239,7 @@ main { padding-bottom: 3rem; }
 .feature-card,
 .edition-card,
 .trend-card,
+.step,
 .empty-card {
   background: var(--card);
   color: var(--ink);
@@ -415,15 +416,80 @@ main { padding-bottom: 3rem; }
 .footer-links a { color: var(--hero-text); font-weight: 700; }
 .footer-links a:hover { color: var(--fucsia); }
 
+/* ---- Página Sobre el proyecto ---- */
+.steps {
+  display: grid;
+  gap: 1rem;
+  counter-reset: step;
+  margin: 0;
+  list-style: none;
+  padding: 0;
+}
+
+.step {
+  position: relative;
+  padding: clamp(1rem, 3vw, 1.45rem) clamp(1rem, 3vw, 1.45rem) clamp(1rem, 3vw, 1.45rem) 3.6rem;
+}
+
+.step::before {
+  counter-increment: step;
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  left: 1.15rem;
+  top: 1.15rem;
+  font-weight: 900;
+  font-size: 1.5rem;
+  letter-spacing: -0.04em;
+  color: var(--fucsia);
+}
+
+.step h3 { margin: 0 0 0.45rem; color: var(--fucsia); font-weight: 900; letter-spacing: -0.03em; }
+.step p { margin: 0.3rem 0; }
+
+.about-code {
+  font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+  font-size: 0.82em;
+  background: var(--mint-soft);
+  color: var(--menta-deep);
+  padding: 0.1rem 0.35rem;
+  border-radius: 6px;
+  overflow-wrap: anywhere;
+}
+
+.about-arch {
+  display: grid;
+  gap: 0.6rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  font-weight: 700;
+}
+
+.about-arch li {
+  border-left: 3px solid var(--fucsia);
+  padding: 0.35rem 0.75rem;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 0 10px 10px 0;
+}
+
+.about-arch .about-code { background: transparent; padding: 0; }
+
+.about-note {
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
 @media (min-width: 720px) {
   .feature-card { grid-template-columns: minmax(0, 1.12fr) minmax(280px, 0.88fr); align-items: center; }
   .editions-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .trends-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (min-width: 1040px) {
   .trends-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .trend-card:nth-child(1), .trend-card:nth-child(4) { grid-column: span 2; }
+  .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -489,6 +555,7 @@ def load_editions() -> list[Edition]:
 def page_shell(title: str, description: str, body: str, current: str = "") -> str:
     nav_ediciones = ' aria-current="page"' if current == "ediciones" else ""
     nav_inicio = ' aria-current="page"' if current == "inicio" else ""
+    nav_sobre = ' aria-current="page"' if current == "sobre" else ""
     return f"""<!doctype html>
 <html lang="es">
 <head>
@@ -509,6 +576,7 @@ def page_shell(title: str, description: str, body: str, current: str = "") -> st
       <nav class="header-nav" aria-label="Navegación principal">
         <a href="index.html"{nav_inicio}>Inicio</a>
         <a href="index.html#ediciones"{nav_ediciones}>Ediciones</a>
+        <a href="sobre.html"{nav_sobre}>Sobre el proyecto</a>
         <a href="#contacto">Contacto</a>
       </nav>
     </div>
@@ -521,7 +589,7 @@ def page_shell(title: str, description: str, body: str, current: str = "") -> st
 
 def page_shell_edition(title: str, description: str, body: str) -> str:
     # Variante con rutas relativas desde ediciones/.
-    return page_shell(title, description, body, current="ediciones").replace('href="assets/style.css"', 'href="../assets/style.css"').replace('href="index.html"', 'href="../index.html"').replace('href="index.html#ediciones"', 'href="../index.html#ediciones"')
+    return page_shell(title, description, body, current="ediciones").replace('href="assets/style.css"', 'href="../assets/style.css"').replace('href="index.html"', 'href="../index.html"').replace('href="index.html#ediciones"', 'href="../index.html#ediciones"').replace('href="sobre.html"', 'href="../sobre.html"')
 
 
 def preview_items(edition: Edition, limit: int = 3) -> str:
@@ -573,6 +641,7 @@ def render_index(editions: list[Edition]) -> str:
       <span class="pill">Fuente citada</span>
       <span class="pill">Ángulo diseñador + docente</span>
     </div>
+    <div class="actions"><a class="button secondary" href="sobre.html">Sobre el proyecto y cómo funciona</a></div>
   </section>
   <main id="contenido">
     <section class="section" aria-labelledby="ultima-edicion">
@@ -607,6 +676,114 @@ def render_index(editions: list[Edition]) -> str:
     return page_shell(f"{BRAND} · Repositorio", f"{TAGLINE}: archivo de {len(editions)} ediciones.", body, current="inicio")
 
 
+STEPS = [
+    ("Disparo", "Cada día a las 8:30 AM (hora de Lima) un cron de Hermes despierta a Llami Cloth y lanza la edición del día."),
+    ("Búsqueda", "El agente busca tendencias REALES de moda + IA con búsquedas variadas en español e inglés. Si un título promete y el fragmento no alcanza, extrae el artículo completo con scraping."),
+    ("Selección", "Elige de 4 a 6 tendencias verificables. Cada una lleva: qué es, por qué importa para un diseñador o docente, y su fuente citada."),
+    ("URLs canónicas", "Convierte cada enlace a la URL directa del medio original (Chrome CDP resuelve los redirects de Google News). Nada de enlaces intermedios."),
+    ("PDF oficial", "Genera el brief en PDF con la maqueta oficial de la marca: plantilla tokenizada, tokens de diseño (negro, fucsia, menta, Roboto) y Chrome headless. Siempre 1 página A4."),
+    ("Archivo redundante", "Guarda PDF + HTML + historial estructurado (JSON y texto). El backup diario sube todo a GitHub a las 4 AM."),
+    ("Publicación", "Un generador idempotente reconstruye este sitio desde el historial y lo publica en GitHub Pages: este dominio."),
+    ("Entrega", "Envía el brief a WhatsApp con el resumen listo para leer y el PDF adjunto."),
+]
+
+
+def render_about() -> str:
+    steps_items = "\n".join(
+        f'    <li class="step"><h3>{h(title)}</h3><p>{h(desc)}</p></li>'
+        for title, desc in STEPS
+    )
+    body = f"""
+  <section class="hero" aria-labelledby="sobre-title">
+    <p class="eyebrow">Sobre el proyecto</p>
+    <h1 id="sobre-title">Llami Cloth 👑</h1>
+    <p class="hero-tagline">{TAGLINE}: este sitio es su archivo público y su bitácora de ejecución.</p>
+  </section>
+  <main id="contenido">
+    <section class="section" aria-labelledby="que-es">
+      <div class="section-header">
+        <h2 id="que-es">¿Qué es Llami Cloth?</h2>
+        <p class="section-note">La reina de los briefs creativos</p>
+      </div>
+      <article class="feature-card">
+        <div>
+          <p class="feature-meta">Identidad</p>
+          <p>Llami Cloth es un agente editorial: <strong>llama + tela</strong>. Cada mañana produce un
+          brief de <strong>tendencias de moda e inteligencia artificial</strong> para Kioshi, diseñador y
+          docente peruano, que lo usa en sus clases, sus proyectos y su propia creatividad. Nació con la
+          corona 👑 como YAMICLO en agosto de 2026 y se renombró a <strong>Llami Cloth</strong>: mismo rol,
+          nueva marca textil.</p>
+          <div class="hero-meta" aria-label="Pilares del proyecto">
+            <span class="pill">Veracidad &gt; cantidad</span>
+            <span class="pill">Fuente citada con URL real</span>
+            <span class="pill">Corto y kawaii</span>
+            <span class="pill">Ángulo diseñador + docente</span>
+          </div>
+        </div>
+        <div>
+          <ul class="about-arch" aria-label="Línea de tiempo de la marca">
+            <li><span class="about-code">Llamicornios</span> — el proyecto raíz</li>
+            <li><span class="about-code">Llami Claw</span> — la agente en OpenClaw</li>
+            <li><span class="about-code">YAMICLO 👑</span> — la corona de los briefs</li>
+            <li><span class="about-code">Llami Cloth 👑</span> — la marca textil definitiva</li>
+          </ul>
+        </div>
+      </article>
+    </section>
+
+    <section class="section" aria-labelledby="arquitectura">
+      <div class="section-header">
+        <h2 id="arquitectura">Cómo se ejecuta cada edición</h2>
+        <p class="section-note">Arquitectura de ejecución, paso a paso</p>
+      </div>
+      <ol class="steps">
+{steps_items}
+      </ol>
+    </section>
+
+    <section class="section" aria-labelledby="ecosistema">
+      <div class="section-header">
+        <h2 id="ecosistema">El ecosistema técnico</h2>
+        <p class="section-note">Piezas que hacen funcionar la máquina</p>
+      </div>
+      <article class="feature-card">
+        <div>
+          <p class="feature-meta">Orquestación</p>
+          <ul class="about-arch">
+            <li><span class="about-code">Cron 8:30 AM (UTC-5)</span> — dispara la edición diaria</li>
+            <li><span class="about-code">skill: yamiclo</span> — protocolo editorial del brief</li>
+            <li><span class="about-code">skill: llami-cloth-pdf</span> — plantilla y generador del PDF</li>
+            <li><span class="about-code">skill: scrapling-web</span> — extracción cuando hace falta</li>
+          </ul>
+        </div>
+        <div>
+          <p class="feature-meta">Infraestructura</p>
+          <ul class="about-arch">
+            <li><span class="about-code">history JSON</span> — la fuente de verdad de este sitio</li>
+            <li><span class="about-code">GitHub Pages + Cloudflare</span> — hosting en trend.llamicornios.com</li>
+            <li><span class="about-code">Backup diario 4 AM</span> — todo respaldado en GitHub</li>
+            <li><span class="about-code">WhatsApp</span> — la entrega del día</li>
+          </ul>
+        </div>
+      </article>
+      <p class="about-note">Regla de oro: nada se inventa. Si un día no hay material confiable, la edición lo dice con honestidad.</p>
+    </section>
+
+    <section class="section" aria-labelledby="explorar">
+      <div class="section-header">
+        <h2 id="explorar">Explorar el archivo</h2>
+      </div>
+      <div class="actions">
+        <a class="button" href="index.html">Ver la última edición</a>
+        <a class="button secondary" href="index.html#ediciones">Archivo completo</a>
+      </div>
+    </section>
+  </main>
+{footer_html('')}
+"""
+    return page_shell(f"{BRAND} · Sobre el proyecto", "Qué es Llami Cloth y cómo se ejecuta el brief diario de tendencias Moda+IA.", body, current="sobre")
+
+
 def footer_html(prefix: str) -> str:
     return f"""
   <footer class="site-footer" id="contacto" role="contentinfo">
@@ -614,6 +791,7 @@ def footer_html(prefix: str) -> str:
       <h2>{BRAND}</h2>
       <p>Veracidad &gt; cantidad · fuente citada con URL real · corto y kawaii · ángulo diseñador + docente.</p>
       <div class="footer-links" aria-label="Contacto">
+        <a href="sobre.html">Sobre el proyecto</a>
         <a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a>
         <a href="{CONTACT_PHONE_HREF}">{CONTACT_PHONE}</a>
         <a href="{INSTAGRAM_URL}" target="_blank" rel="noopener noreferrer">{INSTAGRAM}</a>
@@ -720,6 +898,7 @@ def main() -> None:
 
     write_text(ASSETS_DIR / "style.css", STYLE_CSS)
     write_text(ROOT / "index.html", render_index(editions))
+    write_text(ROOT / "sobre.html", render_about())
     for i, _ in enumerate(editions):
         write_text(EDITIONS_DIR / f"{editions[i].slug}.html", render_edition(editions, i))
     manifest = build_manifest(editions)

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Qué es Llami Cloth y cómo se ejecuta el brief diario de tendencias Moda+IA.">
+  <title>Llami Cloth 👑 · Sobre el proyecto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <a class="brand-link" href="index.html">Llami Cloth 👑</a>
+      <nav class="header-nav" aria-label="Navegación principal">
+        <a href="index.html">Inicio</a>
+        <a href="index.html#ediciones">Ediciones</a>
+        <a href="sobre.html" aria-current="page">Sobre el proyecto</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero" aria-labelledby="sobre-title">
+    <p class="eyebrow">Sobre el proyecto</p>
+    <h1 id="sobre-title">Llami Cloth 👑</h1>
+    <p class="hero-tagline">Brief de Tendencias Moda+IA · Edición diaria: este sitio es su archivo público y su bitácora de ejecución.</p>
+  </section>
+  <main id="contenido">
+    <section class="section" aria-labelledby="que-es">
+      <div class="section-header">
+        <h2 id="que-es">¿Qué es Llami Cloth?</h2>
+        <p class="section-note">La reina de los briefs creativos</p>
+      </div>
+      <article class="feature-card">
+        <div>
+          <p class="feature-meta">Identidad</p>
+          <p>Llami Cloth es un agente editorial: <strong>llama + tela</strong>. Cada mañana produce un
+          brief de <strong>tendencias de moda e inteligencia artificial</strong> para Kioshi, diseñador y
+          docente peruano, que lo usa en sus clases, sus proyectos y su propia creatividad. Nació con la
+          corona 👑 como YAMICLO en agosto de 2026 y se renombró a <strong>Llami Cloth</strong>: mismo rol,
+          nueva marca textil.</p>
+          <div class="hero-meta" aria-label="Pilares del proyecto">
+            <span class="pill">Veracidad &gt; cantidad</span>
+            <span class="pill">Fuente citada con URL real</span>
+            <span class="pill">Corto y kawaii</span>
+            <span class="pill">Ángulo diseñador + docente</span>
+          </div>
+        </div>
+        <div>
+          <ul class="about-arch" aria-label="Línea de tiempo de la marca">
+            <li><span class="about-code">Llamicornios</span> — el proyecto raíz</li>
+            <li><span class="about-code">Llami Claw</span> — la agente en OpenClaw</li>
+            <li><span class="about-code">YAMICLO 👑</span> — la corona de los briefs</li>
+            <li><span class="about-code">Llami Cloth 👑</span> — la marca textil definitiva</li>
+          </ul>
+        </div>
+      </article>
+    </section>
+
+    <section class="section" aria-labelledby="arquitectura">
+      <div class="section-header">
+        <h2 id="arquitectura">Cómo se ejecuta cada edición</h2>
+        <p class="section-note">Arquitectura de ejecución, paso a paso</p>
+      </div>
+      <ol class="steps">
+    <li class="step"><h3>Disparo</h3><p>Cada día a las 8:30 AM (hora de Lima) un cron de Hermes despierta a Llami Cloth y lanza la edición del día.</p></li>
+    <li class="step"><h3>Búsqueda</h3><p>El agente busca tendencias REALES de moda + IA con búsquedas variadas en español e inglés. Si un título promete y el fragmento no alcanza, extrae el artículo completo con scraping.</p></li>
+    <li class="step"><h3>Selección</h3><p>Elige de 4 a 6 tendencias verificables. Cada una lleva: qué es, por qué importa para un diseñador o docente, y su fuente citada.</p></li>
+    <li class="step"><h3>URLs canónicas</h3><p>Convierte cada enlace a la URL directa del medio original (Chrome CDP resuelve los redirects de Google News). Nada de enlaces intermedios.</p></li>
+    <li class="step"><h3>PDF oficial</h3><p>Genera el brief en PDF con la maqueta oficial de la marca: plantilla tokenizada, tokens de diseño (negro, fucsia, menta, Roboto) y Chrome headless. Siempre 1 página A4.</p></li>
+    <li class="step"><h3>Archivo redundante</h3><p>Guarda PDF + HTML + historial estructurado (JSON y texto). El backup diario sube todo a GitHub a las 4 AM.</p></li>
+    <li class="step"><h3>Publicación</h3><p>Un generador idempotente reconstruye este sitio desde el historial y lo publica en GitHub Pages: este dominio.</p></li>
+    <li class="step"><h3>Entrega</h3><p>Envía el brief a WhatsApp con el resumen listo para leer y el PDF adjunto.</p></li>
+      </ol>
+    </section>
+
+    <section class="section" aria-labelledby="ecosistema">
+      <div class="section-header">
+        <h2 id="ecosistema">El ecosistema técnico</h2>
+        <p class="section-note">Piezas que hacen funcionar la máquina</p>
+      </div>
+      <article class="feature-card">
+        <div>
+          <p class="feature-meta">Orquestación</p>
+          <ul class="about-arch">
+            <li><span class="about-code">Cron 8:30 AM (UTC-5)</span> — dispara la edición diaria</li>
+            <li><span class="about-code">skill: yamiclo</span> — protocolo editorial del brief</li>
+            <li><span class="about-code">skill: llami-cloth-pdf</span> — plantilla y generador del PDF</li>
+            <li><span class="about-code">skill: scrapling-web</span> — extracción cuando hace falta</li>
+          </ul>
+        </div>
+        <div>
+          <p class="feature-meta">Infraestructura</p>
+          <ul class="about-arch">
+            <li><span class="about-code">history JSON</span> — la fuente de verdad de este sitio</li>
+            <li><span class="about-code">GitHub Pages + Cloudflare</span> — hosting en trend.llamicornios.com</li>
+            <li><span class="about-code">Backup diario 4 AM</span> — todo respaldado en GitHub</li>
+            <li><span class="about-code">WhatsApp</span> — la entrega del día</li>
+          </ul>
+        </div>
+      </article>
+      <p class="about-note">Regla de oro: nada se inventa. Si un día no hay material confiable, la edición lo dice con honestidad.</p>
+    </section>
+
+    <section class="section" aria-labelledby="explorar">
+      <div class="section-header">
+        <h2 id="explorar">Explorar el archivo</h2>
+      </div>
+      <div class="actions">
+        <a class="button" href="index.html">Ver la última edición</a>
+        <a class="button secondary" href="index.html#ediciones">Archivo completo</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contacto" role="contentinfo">
+    <div class="footer-inner">
+      <h2>Llami Cloth 👑</h2>
+      <p>Veracidad &gt; cantidad · fuente citada con URL real · corto y kawaii · ángulo diseñador + docente.</p>
+      <div class="footer-links" aria-label="Contacto">
+        <a href="sobre.html">Sobre el proyecto</a>
+        <a href="mailto:kioshishimabuku@gmail.com">kioshishimabuku@gmail.com</a>
+        <a href="tel:+51992670102">+51 992-670-102</a>
+        <a href="https://instagram.com/kioshishimabuku" target="_blank" rel="noopener noreferrer">@kioshishimabuku</a>
+      </div>
+      <p>Hecho para Kioshi desde el archivo de briefs. 🦙</p>
+    </div>
+  </footer>
+
+
+</body>
+</html>
