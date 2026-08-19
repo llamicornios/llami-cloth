@@ -2,29 +2,84 @@
   "brand": "Llami Cloth 👑",
   "ediciones": [
     {
-      "edicion": 2,
+      "edicion": 7,
       "fecha_corta": "19.08.2026",
       "fecha_larga": "Miércoles · 19.08.2026 · 8:30 AM Lima",
-      "generado": "2026-08-19T08:38:53",
-      "html": "ediciones/2026-08-19_002.html",
+      "generado": "2026-08-19T18:19:18",
+      "html": "ediciones/2026-08-19_007.html",
+      "numero": "#007",
+      "slug": "2026-08-19_007",
+      "source_file": "/home/llamiclaw/briefs/historial/2026-08-19_007.json",
+      "tendencias": 6
+    },
+    {
+      "edicion": 6,
+      "fecha_corta": "18.08.2026",
+      "fecha_larga": "Martes · 18.08.2026 · 8:30 AM Lima",
+      "generado": "2026-08-19T18:19:18",
+      "html": "ediciones/2026-08-18_006.html",
+      "numero": "#006",
+      "slug": "2026-08-18_006",
+      "source_file": "/home/llamiclaw/briefs/historial/2026-08-18_006.json",
+      "tendencias": 6
+    },
+    {
+      "edicion": 5,
+      "fecha_corta": "17.08.2026",
+      "fecha_larga": "Lunes · 17.08.2026 · 8:30 AM Lima",
+      "generado": "2026-08-19T18:31:42",
+      "html": "ediciones/2026-08-17_005.html",
+      "numero": "#005",
+      "slug": "2026-08-17_005",
+      "source_file": "/home/llamiclaw/briefs/historial/2026-08-17_005.json",
+      "tendencias": 6
+    },
+    {
+      "edicion": 4,
+      "fecha_corta": "16.08.2026",
+      "fecha_larga": "Domingo · 16.08.2026 · 8:30 AM Lima",
+      "generado": "2026-08-19T18:32:34",
+      "html": "ediciones/2026-08-16_004.html",
+      "numero": "#004",
+      "slug": "2026-08-16_004",
+      "source_file": "/home/llamiclaw/briefs/historial/2026-08-16_004.json",
+      "tendencias": 6
+    },
+    {
+      "edicion": 3,
+      "fecha_corta": "15.08.2026",
+      "fecha_larga": "Sábado · 15.08.2026 · 8:30 AM Lima",
+      "generado": "2026-08-19T18:26:25",
+      "html": "ediciones/2026-08-15_003.html",
+      "numero": "#003",
+      "slug": "2026-08-15_003",
+      "source_file": "/home/llamiclaw/briefs/historial/2026-08-15_003.json",
+      "tendencias": 6
+    },
+    {
+      "edicion": 2,
+      "fecha_corta": "14.08.2026",
+      "fecha_larga": "Viernes · 14.08.2026 · 8:30 AM Lima",
+      "generado": "2026-08-19T18:33:42",
+      "html": "ediciones/2026-08-14_002.html",
       "numero": "#002",
-      "slug": "2026-08-19_002",
-      "source_file": "/home/llamiclaw/briefs/historial/2026-08-19_002.json",
+      "slug": "2026-08-14_002",
+      "source_file": "/home/llamiclaw/briefs/historial/2026-08-14_002.json",
       "tendencias": 6
     },
     {
       "edicion": 1,
-      "fecha_corta": "18.08.2026",
-      "fecha_larga": "Martes · 18.08.2026 · 8:30 AM Lima",
-      "generado": "2026-08-18T16:46:46",
-      "html": "ediciones/2026-08-18_001.html",
+      "fecha_corta": "13.08.2026",
+      "fecha_larga": "Jueves · 13.08.2026 · 8:30 AM Lima",
+      "generado": "2026-08-19T18:28:04",
+      "html": "ediciones/2026-08-13_001.html",
       "numero": "#001",
-      "slug": "2026-08-18_001",
-      "source_file": "/home/llamiclaw/briefs/historial/2026-08-18_001.json",
+      "slug": "2026-08-13_001",
+      "source_file": "/home/llamiclaw/briefs/historial/2026-08-13_001.json",
       "tendencias": 6
     }
   ],
   "source_dir": "/home/llamiclaw/briefs/historial",
-  "total_ediciones": 2,
-  "total_tendencias": 12
+  "total_ediciones": 7,
+  "total_tendencias": 42
 }
