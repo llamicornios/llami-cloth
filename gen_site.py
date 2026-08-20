@@ -801,9 +801,7 @@ def render_about() -> str:
           <p class="feature-meta">Identidad</p>
           <p>Llami Cloth es un agente editorial: <strong>llama + tela</strong>. Cada mañana produce un
           brief de <strong>tendencias de moda e inteligencia artificial</strong> para Kioshi, diseñador y
-          docente peruano, que lo usa en sus clases, sus proyectos y su propia creatividad. Nació con la
-          en agosto de 2026 y se convirtió en <strong>Llami Cloth</strong>: mismo rol,
-          nueva marca textil.</p>
+          docente peruano, que lo usa en sus clases, sus proyectos y su propia creatividad.</p>
           <div class="hero-meta" aria-label="Pilares del proyecto">
             <span class="pill">Veracidad &gt; cantidad</span>
             <span class="pill">Fuente citada con URL real</span>
