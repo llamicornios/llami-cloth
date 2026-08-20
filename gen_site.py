@@ -622,8 +622,8 @@ def render_index(editions: list[Edition]) -> str:
     for ed in editions[1:]:
         edition_cards.append(f"""
         <article class="edition-card">
-          <p class="card-meta">Edición {h(ed.number)}</p>
-          <a class="card-title-link" href="ediciones/{h(ed.slug)}.html"><h3 class="card-title">{h(ed.fecha_corta)}</h3></a>
+          <p class="card-meta">{h(ed.fecha_corta)}</p>
+          <a class="card-title-link" href="ediciones/{h(ed.slug)}.html"><h3 class="card-title">{h(ed.number)}</h3></a>
           <p class="card-date">{h(ed.fecha_larga)}</p>
           {preview_items(ed)}
           <div class="actions"><a class="button secondary" href="ediciones/{h(ed.slug)}.html">Leer edición</a></div>
@@ -651,8 +651,8 @@ def render_index(editions: list[Edition]) -> str:
       </div>
       <article class="feature-card">
         <div>
-          <p class="feature-meta">Edición {h(latest.number)}</p>
-          <h3 class="feature-title">{h(latest.fecha_corta)}</h3>
+          <p class="feature-meta">{h(latest.fecha_corta)}</p>
+          <h3 class="feature-title">{h(latest.number)}</h3>
           <p class="feature-date">{h(latest.fecha_larga)}</p>
           <div class="actions"><a class="button" href="ediciones/{h(latest.slug)}.html">Leer la edición completa</a></div>
         </div>
@@ -833,8 +833,8 @@ def render_edition(editions: list[Edition], index: int) -> str:
     newer_link = f'<a class="button secondary" href="{h(newer.slug)}.html">Edición siguiente {h(newer.number)}</a>' if newer else ''
     body = f"""
   <section class="hero edition-hero" aria-labelledby="edition-title">
-    <p class="edition-kicker">Edición {h(ed.number)}</p>
-    <h1 class="edition-title" id="edition-title">{h(ed.fecha_corta)}</h1>
+    <p class="edition-kicker">{h(ed.fecha_corta)}</p>
+    <h1 class="edition-title" id="edition-title">{h(ed.number)}</h1>
     <p class="hero-tagline">{h(ed.fecha_larga)}</p>
     <div class="actions"><a class="button secondary" href="../index.html">Volver al inicio</a></div>
   </section>
