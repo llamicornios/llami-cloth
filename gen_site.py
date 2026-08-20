@@ -642,7 +642,7 @@ def page_shell(title: str, description: str, body: str, current: str = "", og_im
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="{h(description)}">
-  <meta property="og:site_name" content="Llami Cloth 👑">
+  <meta property="og:site_name" content="{BRAND}">
   <meta property="og:title" content="{h(title)}">
   <meta property="og:description" content="{h(description)}">
   <meta property="og:type" content="website">
@@ -787,7 +787,7 @@ def render_about() -> str:
     body = f"""
   <section class="hero" aria-labelledby="sobre-title">
     <p class="eyebrow">Sobre el proyecto</p>
-    <h1 id="sobre-title">Llami Cloth 👑</h1>
+    <h1 id="sobre-title">{BRAND}</h1>
     <p class="hero-tagline">{TAGLINE}: este sitio es su archivo público y su bitácora de ejecución.</p>
   </section>
   <main id="contenido">
