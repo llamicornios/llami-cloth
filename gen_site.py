@@ -42,6 +42,7 @@ STYLE_CSS = r"""
   --fucsia-soft: #FDE4F1;
   --hero-text: #F5F1E8;
   --link: #B3126F;
+  --font-display: "Space Grotesk", Roboto, system-ui, -apple-system, sans-serif;
   --max: 1120px;
   --radius: 22px;
   --shadow: 0 18px 48px rgba(0, 0, 0, 0.18);
@@ -136,7 +137,8 @@ main,
 
 .brand-link {
   color: var(--hero-text);
-  font-weight: 900;
+  font-family: var(--font-display);
+  font-weight: 700;
   letter-spacing: 0.02em;
   text-decoration: none;
 }
@@ -189,9 +191,10 @@ h1 {
   max-width: 780px;
   margin: 0;
   color: var(--hero-text);
+  font-family: var(--font-display);
   font-size: clamp(3rem, 11vw, 7.6rem);
-  font-weight: 900;
-  letter-spacing: -0.07em;
+  font-weight: 700;
+  letter-spacing: -0.04em;
 }
 
 .hero-tagline {
@@ -238,9 +241,10 @@ main { padding-bottom: 3rem; }
 .section h2 {
   margin: 0;
   color: var(--hero-text);
+  font-family: var(--font-display);
   font-size: clamp(1.75rem, 4vw, 3rem);
-  font-weight: 900;
-  letter-spacing: -0.045em;
+  font-weight: 700;
+  letter-spacing: -0.03em;
 }
 
 .section-note {
@@ -283,8 +287,9 @@ main { padding-bottom: 3rem; }
 .trend-card h3 {
   margin: 0.3rem 0 0.7rem;
   color: var(--fucsia-deep);
-  font-weight: 900;
-  letter-spacing: -0.035em;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 .feature-title { font-size: clamp(1.8rem, 5vw, 3.4rem); }
@@ -499,6 +504,60 @@ main { padding-bottom: 3rem; }
   font-weight: 500;
 }
 
+/* ---- Nivel 2: jerarquía editorial + textura textil ---- */
+.feature-lead {
+  margin: 0.1rem 0 0.4rem;
+  color: var(--menta-deep);
+  font-size: 0.95rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Pespunte (costura) sutil en cards secundarias */
+.edition-card,
+.trend-card {
+  border-style: dashed;
+}
+
+.trend-card--lead {
+  border-style: solid;
+  border-color: var(--fucsia-deep);
+  background:
+    radial-gradient(circle at top right, rgba(225, 29, 142, 0.06), transparent 60%),
+    var(--card);
+}
+
+.trend-card--lead .trend-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--fucsia-deep);
+}
+.trend-card--lead .trend-label::after {
+  content: "· principal";
+  font-weight: 700;
+}
+
+/* Header móvil: marca arriba, nav en dos filas tipo chips */
+@media (max-width: 640px) {
+  .header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
+    padding: 0.5rem 0;
+  }
+  .header-nav {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 0.2rem 0.5rem;
+  }
+  .header-nav a {
+    padding: 0 0.35rem;
+  }
+}
+
 @media (min-width: 720px) {
   .feature-card { grid-template-columns: minmax(0, 1.12fr) minmax(280px, 0.88fr); align-items: center; }
   .editions-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -582,10 +641,16 @@ def page_shell(title: str, description: str, body: str, current: str = "") -> st
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="{h(description)}">
+  <meta property="og:site_name" content="Llami Cloth 👑">
+  <meta property="og:title" content="{h(title)}">
+  <meta property="og:description" content="{h(description)}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://trend.llamicornios.com/">
+  <meta name="twitter:card" content="summary">
   <title>{h(title)}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -673,6 +738,7 @@ def render_index(editions: list[Edition]) -> str:
         <div>
           <p class="feature-meta">{h(latest.fecha_corta)}</p>
           <h3 class="feature-title">{h(latest.number)}</h3>
+          <p class="feature-lead">{len(latest.tendencias)} tendencias · Moda+IA · Lima</p>
           <p class="feature-date">{h(latest.fecha_larga)}</p>
           <div class="actions"><a class="button" href="ediciones/{h(latest.slug)}.html">Leer la edición completa</a></div>
         </div>
@@ -832,7 +898,7 @@ def trend_card(t: dict[str, str], idx: int) -> str:
     if url:
         source = f'<a class="source-link" href="{h(url)}" target="_blank" rel="noopener noreferrer">{h(fuente or url)}</a>'
     return f"""
-        <article class="trend-card">
+        <article class="trend-card{ ' trend-card--lead' if idx == 1 else ''}">
           <p class="trend-label">Tendencia {idx:02d}</p>
           <h3>{h(title)}</h3>
           <p><strong>Qué:</strong> {h(que)}</p>

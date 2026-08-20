@@ -12,6 +12,7 @@
   --fucsia-soft: #FDE4F1;
   --hero-text: #F5F1E8;
   --link: #B3126F;
+  --font-display: "Space Grotesk", Roboto, system-ui, -apple-system, sans-serif;
   --max: 1120px;
   --radius: 22px;
   --shadow: 0 18px 48px rgba(0, 0, 0, 0.18);
@@ -106,7 +107,8 @@ main,
 
 .brand-link {
   color: var(--hero-text);
-  font-weight: 900;
+  font-family: var(--font-display);
+  font-weight: 700;
   letter-spacing: 0.02em;
   text-decoration: none;
 }
@@ -159,9 +161,10 @@ h1 {
   max-width: 780px;
   margin: 0;
   color: var(--hero-text);
+  font-family: var(--font-display);
   font-size: clamp(3rem, 11vw, 7.6rem);
-  font-weight: 900;
-  letter-spacing: -0.07em;
+  font-weight: 700;
+  letter-spacing: -0.04em;
 }
 
 .hero-tagline {
@@ -208,9 +211,10 @@ main { padding-bottom: 3rem; }
 .section h2 {
   margin: 0;
   color: var(--hero-text);
+  font-family: var(--font-display);
   font-size: clamp(1.75rem, 4vw, 3rem);
-  font-weight: 900;
-  letter-spacing: -0.045em;
+  font-weight: 700;
+  letter-spacing: -0.03em;
 }
 
 .section-note {
@@ -253,8 +257,9 @@ main { padding-bottom: 3rem; }
 .trend-card h3 {
   margin: 0.3rem 0 0.7rem;
   color: var(--fucsia-deep);
-  font-weight: 900;
-  letter-spacing: -0.035em;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 .feature-title { font-size: clamp(1.8rem, 5vw, 3.4rem); }
@@ -467,6 +472,60 @@ main { padding-bottom: 3rem; }
 .about-note {
   color: var(--ink-soft);
   font-weight: 500;
+}
+
+/* ---- Nivel 2: jerarquía editorial + textura textil ---- */
+.feature-lead {
+  margin: 0.1rem 0 0.4rem;
+  color: var(--menta-deep);
+  font-size: 0.95rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Pespunte (costura) sutil en cards secundarias */
+.edition-card,
+.trend-card {
+  border-style: dashed;
+}
+
+.trend-card--lead {
+  border-style: solid;
+  border-color: var(--fucsia-deep);
+  background:
+    radial-gradient(circle at top right, rgba(225, 29, 142, 0.06), transparent 60%),
+    var(--card);
+}
+
+.trend-card--lead .trend-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--fucsia-deep);
+}
+.trend-card--lead .trend-label::after {
+  content: "· principal";
+  font-weight: 700;
+}
+
+/* Header móvil: marca arriba, nav en dos filas tipo chips */
+@media (max-width: 640px) {
+  .header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
+    padding: 0.5rem 0;
+  }
+  .header-nav {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 0.2rem 0.5rem;
+  }
+  .header-nav a {
+    padding: 0 0.35rem;
+  }
 }
 
 @media (min-width: 720px) {
