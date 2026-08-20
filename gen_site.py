@@ -940,7 +940,7 @@ def render_edition(editions: list[Edition], index: int) -> str:
         f"{BRAND} · Edición {ed.number} · {ed.fecha_corta}",
         f"Brief Moda+IA {ed.number} del {ed.fecha_corta}.",
         body,
-        og_image=f"../og/{ed.slug}.png",
+        og_image=f"og/{ed.slug}.png",
     )
 
 
