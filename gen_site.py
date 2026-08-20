@@ -802,7 +802,7 @@ def render_about() -> str:
           <p>Llami Cloth es un agente editorial: <strong>llama + tela</strong>. Cada mañana produce un
           brief de <strong>tendencias de moda e inteligencia artificial</strong> para Kioshi, diseñador y
           docente peruano, que lo usa en sus clases, sus proyectos y su propia creatividad. Nació con la
-          corona como YAMICLO en agosto de 2026 y se renombró a <strong>Llami Cloth</strong>: mismo rol,
+          en agosto de 2026 y se convirtió en <strong>Llami Cloth</strong>: mismo rol,
           nueva marca textil.</p>
           <div class="hero-meta" aria-label="Pilares del proyecto">
             <span class="pill">Veracidad &gt; cantidad</span>
@@ -815,7 +815,6 @@ def render_about() -> str:
           <ul class="about-arch" aria-label="Línea de tiempo de la marca">
             <li><span class="about-code">Llamicornios</span> — el proyecto raíz</li>
             <li><span class="about-code">Llami Claw</span> — la agente en OpenClaw</li>
-            <li><span class="about-code">YAMICLO</span> — la corona de los briefs</li>
             <li><span class="about-code">Llami Cloth</span> — la marca textil definitiva</li>
           </ul>
         </div>
@@ -842,7 +841,7 @@ def render_about() -> str:
           <p class="feature-meta">Orquestación</p>
           <ul class="about-arch">
             <li><span class="about-code">Cron 8:30 AM (UTC-5)</span> — dispara la edición diaria</li>
-            <li><span class="about-code">skill: yamiclo</span> — protocolo editorial del brief</li>
+            <li><span class="about-code">skill: llamicloth</span> — protocolo editorial del brief</li>
             <li><span class="about-code">skill: llami-cloth-pdf</span> — plantilla y generador del PDF</li>
             <li><span class="about-code">skill: scrapling-web</span> — extracción cuando hace falta</li>
           </ul>
