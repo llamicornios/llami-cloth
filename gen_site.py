@@ -631,10 +631,11 @@ def load_editions() -> list[Edition]:
     return sorted(editions, key=lambda e: e.sort_key, reverse=True)
 
 
-def page_shell(title: str, description: str, body: str, current: str = "") -> str:
+def page_shell(title: str, description: str, body: str, current: str = "", og_image: str = "") -> str:
     nav_ediciones = ' aria-current="page"' if current == "ediciones" else ""
     nav_inicio = ' aria-current="page"' if current == "inicio" else ""
     nav_sobre = ' aria-current="page"' if current == "sobre" else ""
+    og_tag = f'<meta property="og:image" content="https://trend.llamicornios.com/{og_image}">' if og_image else ''
     return f"""<!doctype html>
 <html lang="es">
 <head>
@@ -646,6 +647,7 @@ def page_shell(title: str, description: str, body: str, current: str = "") -> st
   <meta property="og:description" content="{h(description)}">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://trend.llamicornios.com/">
+  {og_tag}
   <meta name="twitter:card" content="summary">
   <title>{h(title)}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -672,9 +674,9 @@ def page_shell(title: str, description: str, body: str, current: str = "") -> st
 """
 
 
-def page_shell_edition(title: str, description: str, body: str) -> str:
+def page_shell_edition(title: str, description: str, body: str, og_image: str) -> str:
     # Variante con rutas relativas desde ediciones/.
-    return page_shell(title, description, body, current="ediciones").replace('href="assets/style.css"', 'href="../assets/style.css"').replace('href="index.html"', 'href="../index.html"').replace('href="index.html#ediciones"', 'href="../index.html#ediciones"').replace('href="sobre.html"', 'href="../sobre.html"')
+    return page_shell(title, description, body, current="ediciones", og_image=og_image).replace('href="assets/style.css"', 'href="../assets/style.css"').replace('href="index.html"', 'href="../index.html"').replace('href="index.html#ediciones"', 'href="../index.html#ediciones"').replace('href="sobre.html"', 'href="../sobre.html"')
 
 
 def preview_items(edition: Edition, limit: int = 3) -> str:
@@ -740,7 +742,10 @@ def render_index(editions: list[Edition]) -> str:
           <h3 class="feature-title">{h(latest.number)}</h3>
           <p class="feature-lead">{len(latest.tendencias)} tendencias · Moda+IA · Lima</p>
           <p class="feature-date">{h(latest.fecha_larga)}</p>
-          <div class="actions"><a class="button" href="ediciones/{h(latest.slug)}.html">Leer la edición completa</a></div>
+          <div class="actions">
+            <a class="button" href="ediciones/{h(latest.slug)}.html">Leer la edición completa</a>
+            <a class="button secondary" href="briefs/Llami_Cloth_Brief_{h(latest.slug)}.pdf" download>Descargar PDF</a>
+          </div>
         </div>
         <div aria-label="Preview de tendencias de la última edición">
           {latest_titles}
@@ -759,7 +764,7 @@ def render_index(editions: list[Edition]) -> str:
   </main>
 {footer_html('')}
 """
-    return page_shell(f"{BRAND} · Repositorio", f"{TAGLINE}: archivo de {len(editions)} ediciones.", body, current="inicio")
+    return page_shell(f"{BRAND} · Repositorio", f"{TAGLINE}: archivo de {len(editions)} ediciones.", body, current="inicio", og_image="og/og-home.png")
 
 
 STEPS = [
@@ -917,32 +922,26 @@ def render_edition(editions: list[Edition], index: int) -> str:
         cards = '<article class="empty-card"><p>Esta edición no tiene tendencias registradas en el JSON.</p></article>'
     older_link = f'<a class="button secondary" href="{h(older.slug)}.html">Edición anterior {h(older.number)}</a>' if older else ''
     newer_link = f'<a class="button secondary" href="{h(newer.slug)}.html">Edición siguiente {h(newer.number)}</a>' if newer else ''
-    body = f"""
-  <section class="hero edition-hero" aria-labelledby="edition-title">
-    <p class="edition-kicker">{h(ed.fecha_corta)}</p>
-    <h1 class="edition-title" id="edition-title">{h(ed.number)}</h1>
-    <p class="hero-tagline">{h(ed.fecha_larga)}</p>
-    <div class="actions"><a class="button secondary" href="../index.html">Volver al inicio</a></div>
-  </section>
-  <main id="contenido">
-    <section class="section" aria-labelledby="tendencias-title">
+    pdf_link = f'<a class="button" href="../briefs/Llami_Cloth_Brief_{h(ed.slug)}.pdf" download>Descargar PDF</a>'
+    para_clase_items = "".join(
+        f"<li>{h(t.get('por_que', ''))}</li>" for t in ed.tendencias[:4] if t.get('por_que'))
+    para_clase = f'''    <section class="section" aria-labelledby="clase-title">
       <div class="section-header">
-        <h2 id="tendencias-title">Tendencias</h2>
-        <p class="section-note">Textos copiados tal cual del historial JSON.</p>
+        <h2 id="clase-title">Para llevar a la clase</h2>
+        <p class="section-note">Ángulo diseñador + docente</p>
       </div>
-      <div class="trends-grid">
-{cards}
-      </div>
-      <nav class="edition-nav" aria-label="Navegación entre ediciones">
-        {older_link}
-        <a class="button" href="../index.html#ediciones">Archivo</a>
-        {newer_link}
-      </nav>
+      <article class="feature-card"><ul class="preview-list">
+{para_clase_items}
+      </ul></article>
     </section>
-  </main>
-{footer_html('../')}
-"""
-    return page_shell_edition(f"{BRAND} · Edición {ed.number} · {ed.fecha_corta}", f"Brief Moda+IA {ed.number} del {ed.fecha_corta}.", body)
+''' if para_clase_items else ''
+    body = f"""\n  <section class="hero edition-hero" aria-labelledby="edition-title">\n    <p class="edition-kicker">{h(ed.fecha_corta)}</p>\n    <h1 class="edition-title" id="edition-title">{h(ed.number)}</h1>\n    <p class="hero-tagline">{h(ed.fecha_larga)}</p>\n    <div class="actions">\n      {pdf_link}\n      <a class="button secondary" href="../index.html">Volver al inicio</a>\n    </div>\n  </section>\n  <main id="contenido">\n{para_clase}    <section class="section" aria-labelledby="tendencias-title">\n      <div class="section-header">\n        <h2 id="tendencias-title">Tendencias</h2>\n        <p class="section-note">Textos copiados tal cual del historial JSON.</p>\n      </div>\n      <div class="trends-grid">\n{cards}\n      </div>\n      <nav class="edition-nav" aria-label="Navegación entre ediciones">\n        {older_link}\n        <a class="button" href="../index.html#ediciones">Archivo</a>\n        {newer_link}\n      </nav>\n    </section>\n  </main>\n{footer_html('../')}\n"""
+    return page_shell_edition(
+        f"{BRAND} · Edición {ed.number} · {ed.fecha_corta}",
+        f"Brief Moda+IA {ed.number} del {ed.fecha_corta}.",
+        body,
+        og_image=f"../og/{ed.slug}.png",
+    )
 
 
 def write_text(path: Path, content: str) -> None:
