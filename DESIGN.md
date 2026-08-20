@@ -73,7 +73,7 @@ components:
     typography: "{typography.card-title}"
 ---
 
-# Llami Cloth 👑
+# Llami Cloth
 
 ## Overview
 
@@ -110,7 +110,7 @@ medido — cero decoración gratuita.
 ## Do's and Don'ts
 
 - **Sí:** fondo negro; fucsia-deep para texto sobre blanco; pespunte/textura
-  textil sutil; Space Grotesk en títulos; kawaii medido (una 👑 como máximo).
+  textil sutil; Space Grotesk en títulos; kawaii medido.
 - **No:** texto fucsia claro (#E11D8E) sobre blanco (falla AA 4.5:1);
   glassmorphism; gradientes agresivos; decoración textil excesiva; emoji
   decorativo.

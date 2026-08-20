@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generador estático idempotente para Llami Cloth 👑.
+"""Generador estático idempotente para Llami Cloth.
 
 Lee el historial JSON de briefs y regenera index.html, ediciones/*.html,
 assets/style.css y manifest.json. No usa dependencias externas.
@@ -19,7 +19,7 @@ HISTORY_DIR = Path("/home/llamiclaw/briefs/historial")
 EDITIONS_DIR = ROOT / "ediciones"
 ASSETS_DIR = ROOT / "assets"
 
-BRAND = "Llami Cloth 👑"
+BRAND = "Llami Cloth"
 TAGLINE = "Brief de Tendencias Moda+IA · Edición diaria"
 CONTACT_EMAIL = "kioshishimabuku@gmail.com"
 CONTACT_PHONE = "+51 992-670-102"
@@ -802,7 +802,7 @@ def render_about() -> str:
           <p>Llami Cloth es un agente editorial: <strong>llama + tela</strong>. Cada mañana produce un
           brief de <strong>tendencias de moda e inteligencia artificial</strong> para Kioshi, diseñador y
           docente peruano, que lo usa en sus clases, sus proyectos y su propia creatividad. Nació con la
-          corona 👑 como YAMICLO en agosto de 2026 y se renombró a <strong>Llami Cloth</strong>: mismo rol,
+          corona como YAMICLO en agosto de 2026 y se renombró a <strong>Llami Cloth</strong>: mismo rol,
           nueva marca textil.</p>
           <div class="hero-meta" aria-label="Pilares del proyecto">
             <span class="pill">Veracidad &gt; cantidad</span>
@@ -815,8 +815,8 @@ def render_about() -> str:
           <ul class="about-arch" aria-label="Línea de tiempo de la marca">
             <li><span class="about-code">Llamicornios</span> — el proyecto raíz</li>
             <li><span class="about-code">Llami Claw</span> — la agente en OpenClaw</li>
-            <li><span class="about-code">YAMICLO 👑</span> — la corona de los briefs</li>
-            <li><span class="about-code">Llami Cloth 👑</span> — la marca textil definitiva</li>
+            <li><span class="about-code">YAMICLO</span> — la corona de los briefs</li>
+            <li><span class="about-code">Llami Cloth</span> — la marca textil definitiva</li>
           </ul>
         </div>
       </article>
