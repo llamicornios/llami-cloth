@@ -923,7 +923,6 @@ def render_index(editions: list[Edition]) -> str:
     <div class="hero-meta" aria-label="Pilares del proyecto">
       <span class="pill">Veracidad &gt; cantidad</span>
       <span class="pill">Fuente citada</span>
-      <span class="pill">Ángulo diseñador + docente</span>
     </div>
     <div class="actions"><a class="button secondary" href="sobre.html">Sobre el proyecto y cómo funciona</a></div>
   </section>
@@ -1010,7 +1009,6 @@ def render_about() -> str:
             <span class="pill">Veracidad &gt; cantidad</span>
             <span class="pill">Fuente citada con URL real</span>
             <span class="pill">Corto y kawaii</span>
-            <span class="pill">Ángulo diseñador + docente</span>
           </div>
         </div>
         <div>
@@ -1081,7 +1079,7 @@ def footer_html(prefix: str) -> str:
   <footer class="site-footer" id="contacto" role="contentinfo">
     <div class="footer-inner">
       <h2>{BRAND}</h2>
-      <p>Veracidad &gt; cantidad · fuente citada con URL real · corto y kawaii · ángulo diseñador + docente.</p>
+      <p>Veracidad &gt; cantidad · fuente citada con URL real · corto y kawaii.</p>
       <div class="footer-links" aria-label="Contacto">
         <a href="sobre.html">Sobre el proyecto</a>
         <a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a>
