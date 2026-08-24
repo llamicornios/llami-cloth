@@ -611,3 +611,42 @@ main { padding-bottom: 3rem; }
   outline-offset: 2px;
 }
 .search-empty { margin-top: 1rem; }
+
+/* ---- Chips de tags para filtro rápido ---- */
+.tag-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0.9rem 0 1.2rem;
+}
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 34px;
+  padding: 0.28rem 0.9rem;
+  border: 2px solid var(--menta);
+  border-radius: 999px;
+  background: rgba(14, 159, 131, 0.10);
+  color: var(--menta-deep);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.tag-chip:hover {
+  background: var(--menta-soft);
+}
+.tag-chip.tag-chip--active,
+.tag-chip.active {
+  background: var(--fucsia);
+  border-color: var(--fucsia);
+  color: #FFFFFF;
+}
+.tag-chip .tag-count {
+  font-size: 0.7rem;
+  font-weight: 700;
+  opacity: 0.75;
+}
+.tag-chip.active .tag-count { opacity: 0.9; }

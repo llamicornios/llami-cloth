@@ -73,6 +73,19 @@
         <span class="search-label">Filtrar ediciones</span>
         <input id="search-ediciones" type="search" placeholder="Buscar por tag o tema…" autocomplete="off">
       </label>
+        <div class="tag-chips" aria-label="Tags para filtrar rápido">
+<button type="button" class="tag-chip" data-tag="Retail">Retail <span class="tag-count">16</span></button>
+<button type="button" class="tag-chip" data-tag="IA generativa">IA generativa <span class="tag-count">15</span></button>
+<button type="button" class="tag-chip" data-tag="Herramientas IA">Herramientas IA <span class="tag-count">16</span></button>
+<button type="button" class="tag-chip" data-tag="LatAm">LatAm <span class="tag-count">10</span></button>
+<button type="button" class="tag-chip" data-tag="Sostenibilidad">Sostenibilidad <span class="tag-count">4</span></button>
+<button type="button" class="tag-chip" data-tag="Negocio">Negocio <span class="tag-count">17</span></button>
+<button type="button" class="tag-chip" data-tag="Visualidad">Visualidad <span class="tag-count">28</span></button>
+<button type="button" class="tag-chip" data-tag="Educación">Educación <span class="tag-count">8</span></button>
+<button type="button" class="tag-chip" data-tag="Diseño 3D">Diseño 3D <span class="tag-count">4</span></button>
+<button type="button" class="tag-chip" data-tag="Marcas">Marcas <span class="tag-count">25</span></button>
+<button type="button" class="tag-chip" data-tag="Textil">Textil <span class="tag-count">5</span></button>
+  </div>
       <div class="editions-list" id="editions-list">
 
         <article class="edition-card" data-search="23.08.2026 #011 herramientas ia marcas negocio retail negocio textil visualidad textil negocio visualidad ia generativa la carrera de la ia por reinventar el textil la ia cambia el descubrimiento de producto y dispara conversión physical ai entra a las fábricas de moda: del bosquejo a la costura ia recorta hasta 70% el coste de la producción visual el 87% de la moda en eeuu reforzará perfiles transformados por ia la era de la &#x27;cara ia&#x27; vuelve protagonista a lo auténtico">
@@ -173,7 +186,8 @@
       if (!input) { return; }
       var cards = Array.prototype.slice.call(document.querySelectorAll('.edition-card[data-search]'));
       var empty = document.getElementById('search-empty');
-      input.addEventListener('input', function () {
+      var chips = Array.prototype.slice.call(document.querySelectorAll('.tag-chip[data-tag]'));
+      function refresh() {
         var q = input.value.trim().toLowerCase();
         var shown = 0;
         cards.forEach(function (card) {
@@ -183,6 +197,19 @@
         });
         empty.hidden = shown !== 0;
         input.setAttribute('aria-label', shown + ' ediciones encontradas');
+        chips.forEach(function (ch) {
+          ch.classList.toggle('active', !q ? false : q === ch.getAttribute('data-tag').toLowerCase());
+        });
+      }
+      input.addEventListener('input', refresh);
+      chips.forEach(function (ch) {
+        ch.addEventListener('click', function () {
+          var tag = ch.getAttribute('data-tag');
+          var isActive = ch.classList.contains('active') && input.value.trim().toLowerCase() === tag.toLowerCase();
+          input.value = isActive ? '' : tag;
+          refresh();
+          input.focus();
+        });
       });
     })();
   </script>

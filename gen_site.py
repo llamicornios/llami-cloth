@@ -642,6 +642,45 @@ main { padding-bottom: 3rem; }
 }
 .search-empty { margin-top: 1rem; }
 
+/* ---- Chips de tags para filtro rápido ---- */
+.tag-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0.9rem 0 1.2rem;
+}
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 34px;
+  padding: 0.28rem 0.9rem;
+  border: 2px solid var(--menta);
+  border-radius: 999px;
+  background: rgba(14, 159, 131, 0.10);
+  color: var(--menta-deep);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.tag-chip:hover {
+  background: var(--menta-soft);
+}
+.tag-chip.tag-chip--active,
+.tag-chip.active {
+  background: var(--fucsia);
+  border-color: var(--fucsia);
+  color: #FFFFFF;
+}
+.tag-chip .tag-count {
+  font-size: 0.7rem;
+  font-weight: 700;
+  opacity: 0.75;
+}
+.tag-chip.active .tag-count { opacity: 0.9; }
+
 """.strip() + "\n"
 
 
@@ -780,7 +819,8 @@ SEARCH_SCRIPT = """  <script>
       if (!input) { return; }
       var cards = Array.prototype.slice.call(document.querySelectorAll('.edition-card[data-search]'));
       var empty = document.getElementById('search-empty');
-      input.addEventListener('input', function () {
+      var chips = Array.prototype.slice.call(document.querySelectorAll('.tag-chip[data-tag]'));
+      function refresh() {
         var q = input.value.trim().toLowerCase();
         var shown = 0;
         cards.forEach(function (card) {
@@ -790,10 +830,53 @@ SEARCH_SCRIPT = """  <script>
         });
         empty.hidden = shown !== 0;
         input.setAttribute('aria-label', shown + ' ediciones encontradas');
+        chips.forEach(function (ch) {
+          ch.classList.toggle('active', !q ? false : q === ch.getAttribute('data-tag').toLowerCase());
+        });
+      }
+      input.addEventListener('input', refresh);
+      chips.forEach(function (ch) {
+        ch.addEventListener('click', function () {
+          var tag = ch.getAttribute('data-tag');
+          var isActive = ch.classList.contains('active') && input.value.trim().toLowerCase() === tag.toLowerCase();
+          input.value = isActive ? '' : tag;
+          refresh();
+          input.focus();
+        });
       });
     })();
   </script>
 """
+
+
+def collect_tags(editions: list[Edition]) -> dict[str, int]:
+    """Tags presentes en todas las ediciones (con su conteo de tendencias)."""
+    counts: dict[str, int] = {}
+    for e in editions:
+        for t in e.tendencias:
+            for tag in (t.get("tags") or []):
+                counts[tag] = counts.get(tag, 0) + 1
+    return counts
+
+
+# Orden estable preferido para mostrar los chips (vocabulario fijo de la skill).
+TAG_ORDER = ["Retail", "IA generativa", "Herramientas IA", "LatAm", "Sostenibilidad",
+             "Negocio", "Visualidad", "Educación", "Diseño 3D", "Belleza", "Marcas", "Textil"]
+
+
+def chips_html(tags: dict[str, int]) -> str:
+    """Botones de tag rápidos con su conteo, solo los que existen en el archivo."""
+    seq = [t for t in TAG_ORDER if t in tags] + [t for t in sorted(set(tags) - set(TAG_ORDER))]
+    if not seq:
+        return ""
+    parts = ["  <div class=\"tag-chips\" aria-label=\"Tags para filtrar rápido\">"]
+    for t in seq:
+        parts.append(
+            f'<button type="button" class="tag-chip" data-tag="{h(t)}">'
+            f'{h(t)} <span class="tag-count">{tags[t]}</span></button>'
+        )
+    parts.append("  </div>")
+    return "\n".join(parts)
 
 
 def render_index(editions: list[Edition]) -> str:
@@ -831,6 +914,7 @@ def render_index(editions: list[Edition]) -> str:
 """)
     previous_html = "".join(edition_cards) if edition_cards else '<article class="empty-card"><p>No hay ediciones anteriores todavía.</p></article>'
     latest_titles = preview_items(latest, limit=4)
+    chips = chips_html(collect_tags(editions))
     body = f"""
   <section class="hero" aria-labelledby="hero-title">
     <p class="eyebrow">Repositorio de briefs</p>
@@ -874,6 +958,7 @@ def render_index(editions: list[Edition]) -> str:
         <span class="search-label">Filtrar ediciones</span>
         <input id="search-ediciones" type="search" placeholder="Buscar por tag o tema…" autocomplete="off">
       </label>
+      {chips}
       <div class="editions-list" id="editions-list">
 {previous_html}
       </div>
