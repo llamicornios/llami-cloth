@@ -1132,18 +1132,6 @@ def render_edition(editions: list[Edition], index: int) -> str:
     older_link = f'<a class="button secondary" href="{h(older.slug)}.html">Edición anterior {h(older.number)}</a>' if older else ''
     newer_link = f'<a class="button secondary" href="{h(newer.slug)}.html">Edición siguiente {h(newer.number)}</a>' if newer else ''
     pdf_link = f'<a class="button" href="../briefs/Llami_Cloth_Brief_{h(ed.slug)}.pdf" download>Descargar PDF</a>'
-    para_clase_items = "".join(
-        f"<li>{h(t.get('por_que', ''))}</li>" for t in ed.tendencias[:4] if t.get('por_que'))
-    para_clase = f'''    <section class="section" aria-labelledby="clase-title">
-      <div class="section-header">
-        <h2 id="clase-title">Para llevar a la clase</h2>
-        <p class="section-note">Ángulo diseñador + docente</p>
-      </div>
-      <article class="feature-card"><ul class="preview-list">
-{para_clase_items}
-      </ul></article>
-    </section>
-''' if para_clase_items else ''
     director_html = (f'''    <section class="section" aria-labelledby="director-title">
       <div class="section-header">
         <h2 id="director-title">🎼 La directora de orquesta</h2>
@@ -1152,7 +1140,7 @@ def render_edition(editions: list[Edition], index: int) -> str:
       <article class="feature-card"><p class="director-reflexion">{h(ed.director)}</p></article>
     </section>
 ''') if ed.director else ''
-    body = f"""\n  <section class="hero edition-hero" aria-labelledby="edition-title">\n    <p class="edition-kicker">{h(ed.fecha_corta)}</p>\n    <h1 class="edition-title" id="edition-title">{h(ed.number)}</h1>\n    <p class="hero-tagline">{h(ed.fecha_larga)}</p>\n    <div class="actions">\n      {pdf_link}\n      <a class="button secondary" href="../index.html">Volver al inicio</a>\n    </div>\n  </section>\n  <main id="contenido">\n{para_clase}{director_html}    <section class="section" aria-labelledby="tendencias-title">\n      <div class="section-header">\n        <h2 id="tendencias-title">Tendencias</h2>\n        <p class="section-note">Textos copiados tal cual del historial JSON.</p>\n      </div>\n      <div class="trends-grid">\n{cards}\n      </div>\n      <nav class="edition-nav" aria-label="Navegación entre ediciones">\n        {older_link}\n        <a class="button" href="../index.html#ediciones">Archivo</a>\n        {newer_link}\n      </nav>\n    </section>\n  </main>\n{footer_html('../')}\n"""
+    body = f"""\n  <section class="hero edition-hero" aria-labelledby="edition-title">\n    <p class="edition-kicker">{h(ed.fecha_corta)}</p>\n    <h1 class="edition-title" id="edition-title">{h(ed.number)}</h1>\n    <p class="hero-tagline">{h(ed.fecha_larga)}</p>\n    <div class="actions">\n      {pdf_link}\n      <a class="button secondary" href="../index.html">Volver al inicio</a>\n    </div>\n  </section>\n  <main id="contenido">\n{director_html}    <section class="section" aria-labelledby="tendencias-title">\n      <div class="section-header">\n        <h2 id="tendencias-title">Tendencias</h2>\n        <p class="section-note">Textos copiados tal cual del historial JSON.</p>\n      </div>\n      <div class="trends-grid">\n{cards}\n      </div>\n      <nav class="edition-nav" aria-label="Navegación entre ediciones">\n        {older_link}\n        <a class="button" href="../index.html#ediciones">Archivo</a>\n        {newer_link}\n      </nav>\n    </section>\n  </main>\n{footer_html('../')}\n"""
     return page_shell_edition(
         f"{BRAND} · Edición {ed.number} · {ed.fecha_corta}",
         f"Brief Moda+IA {ed.number} del {ed.fecha_corta}.",
