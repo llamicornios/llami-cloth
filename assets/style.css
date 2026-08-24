@@ -544,3 +544,70 @@ main { padding-bottom: 3rem; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
 }
+
+/* ---- Capa directora de orquesta (web) ---- */
+.director-reflexion {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--fucsia-deep);
+  line-height: 1.5;
+}
+
+/* ---- Badge "No te pierdas" + tags en trend cards ---- */
+.web-badge {
+  display: inline-block;
+  margin: 0 0 0.4rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  background: var(--fucsia);
+  color: #FFFFFF;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+}
+.web-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.55rem 0 0;
+}
+.web-tag {
+  background: var(--menta-soft);
+  color: var(--menta-deep);
+  border-radius: 999px;
+  padding: 0.22rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+/* ---- Barra de búsqueda del archivo ---- */
+.searchbox {
+  display: grid;
+  gap: 0.4rem;
+  margin-bottom: 1.2rem;
+}
+.search-label {
+  color: var(--menta-soft);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.searchbox input {
+  width: 100%;
+  min-height: 50px;
+  padding: 0.6rem 1rem;
+  border: 2px solid var(--menta);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 500;
+}
+.searchbox input::placeholder { color: var(--ink-soft); }
+.searchbox input:focus {
+  outline: 3px solid var(--fucsia);
+  outline-offset: 2px;
+}
+.search-empty { margin-top: 1rem; }

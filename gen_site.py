@@ -574,6 +574,74 @@ main { padding-bottom: 3rem; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
 }
+
+/* ---- Capa directora de orquesta (web) ---- */
+.director-reflexion {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--fucsia-deep);
+  line-height: 1.5;
+}
+
+/* ---- Badge "No te pierdas" + tags en trend cards ---- */
+.web-badge {
+  display: inline-block;
+  margin: 0 0 0.4rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  background: var(--fucsia);
+  color: #FFFFFF;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+}
+.web-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.55rem 0 0;
+}
+.web-tag {
+  background: var(--menta-soft);
+  color: var(--menta-deep);
+  border-radius: 999px;
+  padding: 0.22rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+/* ---- Barra de búsqueda del archivo ---- */
+.searchbox {
+  display: grid;
+  gap: 0.4rem;
+  margin-bottom: 1.2rem;
+}
+.search-label {
+  color: var(--menta-soft);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.searchbox input {
+  width: 100%;
+  min-height: 50px;
+  padding: 0.6rem 1rem;
+  border: 2px solid var(--menta);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 500;
+}
+.searchbox input::placeholder { color: var(--ink-soft); }
+.searchbox input:focus {
+  outline: 3px solid var(--fucsia);
+  outline-offset: 2px;
+}
+.search-empty { margin-top: 1rem; }
+
 """.strip() + "\n"
 
 
@@ -586,7 +654,8 @@ class Edition:
     fecha_larga: str
     fecha_corta: str
     generado: str
-    tendencias: list[dict[str, str]]
+    director: str
+    tendencias: list[dict[str, Any]]
 
     @property
     def sort_key(self) -> tuple[str, int, str]:
@@ -607,6 +676,19 @@ def clean_slug(path: Path) -> str:
     return slug
 
 
+def _norm(t: dict[str, Any]) -> dict[str, Any]:
+    """Normaliza cada tendencia preservando tipos útiles (tags, destacada)."""
+    out: dict[str, Any] = {}
+    for k, v in t.items():
+        if k == "tags" and isinstance(v, list):
+            out[k] = [str(tag) for tag in v]
+        elif k == "destacada":
+            out[k] = bool(v)
+        else:
+            out[k] = str(v)
+    return out
+
+
 def load_editions() -> list[Edition]:
     editions: list[Edition] = []
     for path in sorted(HISTORY_DIR.glob("*.json")):
@@ -625,7 +707,8 @@ def load_editions() -> list[Edition]:
                 fecha_larga=str(data.get("fecha_larga", "")),
                 fecha_corta=str(data.get("fecha_corta", "")),
                 generado=str(data.get("generado", "")),
-                tendencias=[{str(k): str(v) for k, v in t.items()} for t in tendencias if isinstance(t, dict)],
+                director=str(data.get("director", "")),
+                tendencias=[_norm(t) for t in tendencias if isinstance(t, dict)],
             )
         )
     return sorted(editions, key=lambda e: e.sort_key, reverse=True)
@@ -683,7 +766,34 @@ def preview_items(edition: Edition, limit: int = 3) -> str:
     items = edition.tendencias[:limit]
     if not items:
         return '<p class="card-date">Sin tendencias registradas en el JSON.</p>'
-    return "<ol class=\"preview-list\">" + "".join(f"<li>{h(t.get('titulo', 'Sin título'))}</li>" for t in items) + "</ol>"
+    lis = []
+    for t in items:
+        crown = "👑 " if t.get("destacada") else ""
+        lis.append(f"<li>{crown}{h(t.get('titulo', 'Sin título'))}</li>")
+    return "<ol class=\"preview-list\">" + "".join(lis) + "</ol>"
+
+
+# Filtro client-side de ediciones por tag/palabra (búsqueda en el index).
+SEARCH_SCRIPT = """  <script>
+    (function () {
+      var input = document.getElementById('search-ediciones');
+      if (!input) { return; }
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.edition-card[data-search]'));
+      var empty = document.getElementById('search-empty');
+      input.addEventListener('input', function () {
+        var q = input.value.trim().toLowerCase();
+        var shown = 0;
+        cards.forEach(function (card) {
+          var hit = !q || (card.getAttribute('data-search') || '').indexOf(q) !== -1;
+          card.hidden = !hit;
+          if (hit) { shown++; }
+        });
+        empty.hidden = shown !== 0;
+        input.setAttribute('aria-label', shown + ' ediciones encontradas');
+      });
+    })();
+  </script>
+"""
 
 
 def render_index(editions: list[Edition]) -> str:
@@ -707,8 +817,11 @@ def render_index(editions: list[Edition]) -> str:
     latest = editions[0]
     edition_cards = []
     for ed in editions[1:]:
+        search_tags = " ".join(tag for t in ed.tendencias for tag in (t.get("tags") or []))
+        search_titles = " ".join(t.get("titulo", "") for t in ed.tendencias)
+        data_search = h(f"{ed.fecha_corta} {ed.number} {search_tags} {search_titles}".lower())
         edition_cards.append(f"""
-        <article class="edition-card">
+        <article class="edition-card" data-search="{data_search}">
           <p class="card-meta">{h(ed.fecha_corta)}</p>
           <a class="card-title-link" href="ediciones/{h(ed.slug)}.html"><h3 class="card-title">{h(ed.number)}</h3></a>
           <p class="card-date">{h(ed.fecha_larga)}</p>
@@ -755,13 +868,19 @@ def render_index(editions: list[Edition]) -> str:
     <section class="section" id="ediciones" aria-labelledby="ediciones-title">
       <div class="section-header">
         <h2 id="ediciones-title">Ediciones anteriores</h2>
-        <p class="section-note">Archivo jerárquico por fecha + edición.</p>
+        <p class="section-note">Busca por tag (LatAm, Retail, IA generativa…) o palabra.</p>
       </div>
-      <div class="editions-list">
+      <label class="searchbox" for="search-ediciones">
+        <span class="search-label">Filtrar ediciones</span>
+        <input id="search-ediciones" type="search" placeholder="Buscar por tag o tema…" autocomplete="off">
+      </label>
+      <div class="editions-list" id="editions-list">
 {previous_html}
       </div>
+      <p class="section-note search-empty" id="search-empty" hidden>Sin coincidencias. Prueba con otro término o tag.</p>
     </section>
   </main>
+{SEARCH_SCRIPT}
 {footer_html('')}
 """
     return page_shell(f"{BRAND} · Repositorio", f"{TAGLINE}: archivo de {len(editions)} ediciones.", body, current="inicio", og_image="og/og-home.png")
@@ -890,21 +1009,29 @@ def footer_html(prefix: str) -> str:
 """
 
 
-def trend_card(t: dict[str, str], idx: int) -> str:
+def trend_card(t: dict[str, Any], idx: int) -> str:
     title = t.get("titulo", "Sin título")
     que = t.get("que", "")
+    dato = t.get("dato", "")
     por_que = t.get("por_que", "")
+    tags = t.get("tags") or []
     fuente = t.get("fuente", "")
     url = t.get("url", "")
     source = h(fuente)
     if url:
         source = f'<a class="source-link" href="{h(url)}" target="_blank" rel="noopener noreferrer">{h(fuente or url)}</a>'
+    badge = '<p class="web-badge">👑 No te pierdas</p>' if t.get("destacada") else ""
+    dato_html = f'<p><strong>Dato:</strong> {h(dato)}</p>' if dato else ""
+    tags_html = ('<div class="web-tags">' + "".join(f'<span class="web-tag">{h(tag)}</span>' for tag in tags) + '</div>') if tags else ""
     return f"""
         <article class="trend-card{ ' trend-card--lead' if idx == 1 else ''}">
           <p class="trend-label">Tendencia {idx:02d}</p>
+          {badge}
           <h3>{h(title)}</h3>
           <p><strong>Qué:</strong> {h(que)}</p>
+          {dato_html}
           <p><strong>Por qué:</strong> {h(por_que)}</p>
+          {tags_html}
           <p><strong>Fuente:</strong> {source}</p>
         </article>
 """
@@ -932,7 +1059,15 @@ def render_edition(editions: list[Edition], index: int) -> str:
       </ul></article>
     </section>
 ''' if para_clase_items else ''
-    body = f"""\n  <section class="hero edition-hero" aria-labelledby="edition-title">\n    <p class="edition-kicker">{h(ed.fecha_corta)}</p>\n    <h1 class="edition-title" id="edition-title">{h(ed.number)}</h1>\n    <p class="hero-tagline">{h(ed.fecha_larga)}</p>\n    <div class="actions">\n      {pdf_link}\n      <a class="button secondary" href="../index.html">Volver al inicio</a>\n    </div>\n  </section>\n  <main id="contenido">\n{para_clase}    <section class="section" aria-labelledby="tendencias-title">\n      <div class="section-header">\n        <h2 id="tendencias-title">Tendencias</h2>\n        <p class="section-note">Textos copiados tal cual del historial JSON.</p>\n      </div>\n      <div class="trends-grid">\n{cards}\n      </div>\n      <nav class="edition-nav" aria-label="Navegación entre ediciones">\n        {older_link}\n        <a class="button" href="../index.html#ediciones">Archivo</a>\n        {newer_link}\n      </nav>\n    </section>\n  </main>\n{footer_html('../')}\n"""
+    director_html = (f'''    <section class="section" aria-labelledby="director-title">
+      <div class="section-header">
+        <h2 id="director-title">🎼 La directora de orquesta</h2>
+        <p class="section-note">La IA pone instrumentos; el diseñador decide la partitura</p>
+      </div>
+      <article class="feature-card"><p class="director-reflexion">{h(ed.director)}</p></article>
+    </section>
+''') if ed.director else ''
+    body = f"""\n  <section class="hero edition-hero" aria-labelledby="edition-title">\n    <p class="edition-kicker">{h(ed.fecha_corta)}</p>\n    <h1 class="edition-title" id="edition-title">{h(ed.number)}</h1>\n    <p class="hero-tagline">{h(ed.fecha_larga)}</p>\n    <div class="actions">\n      {pdf_link}\n      <a class="button secondary" href="../index.html">Volver al inicio</a>\n    </div>\n  </section>\n  <main id="contenido">\n{para_clase}{director_html}    <section class="section" aria-labelledby="tendencias-title">\n      <div class="section-header">\n        <h2 id="tendencias-title">Tendencias</h2>\n        <p class="section-note">Textos copiados tal cual del historial JSON.</p>\n      </div>\n      <div class="trends-grid">\n{cards}\n      </div>\n      <nav class="edition-nav" aria-label="Navegación entre ediciones">\n        {older_link}\n        <a class="button" href="../index.html#ediciones">Archivo</a>\n        {newer_link}\n      </nav>\n    </section>\n  </main>\n{footer_html('../')}\n"""
     return page_shell_edition(
         f"{BRAND} · Edición {ed.number} · {ed.fecha_corta}",
         f"Brief Moda+IA {ed.number} del {ed.fecha_corta}.",
