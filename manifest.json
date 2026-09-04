@@ -2,6 +2,17 @@
   "brand": "Llami Cloth",
   "ediciones": [
     {
+      "edicion": 20,
+      "fecha_corta": "04.09.2026",
+      "fecha_larga": "Viernes · 04.09.2026 · 8:30 AM Lima",
+      "generado": "2026-09-04T08:35:49",
+      "html": "ediciones/2026-09-04_020.html",
+      "numero": "#020",
+      "slug": "2026-09-04_020",
+      "source_file": "/home/llamiclaw/briefs/historial/2026-09-04_020.json",
+      "tendencias": 6
+    },
+    {
       "edicion": 19,
       "fecha_corta": "03.09.2026",
       "fecha_larga": "Jueves · 03.09.2026 · 8:30 AM Lima",
@@ -212,6 +223,6 @@
     }
   ],
   "source_dir": "/home/llamiclaw/briefs/historial",
-  "total_ediciones": 19,
-  "total_tendencias": 114
+  "total_ediciones": 20,
+  "total_tendencias": 120
 }
