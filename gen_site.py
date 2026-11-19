@@ -974,7 +974,7 @@ STEPS = [
     ("Búsqueda", "El agente busca tendencias REALES de moda + IA con búsquedas variadas en español e inglés. Si un título promete y el fragmento no alcanza, extrae el artículo completo con scraping."),
     ("Selección", "Elige de 4 a 6 tendencias verificables. Cada una lleva: qué es, por qué importa para un diseñador o docente, y su fuente citada."),
     ("URLs canónicas", "Convierte cada enlace a la URL directa del medio original (Chrome CDP resuelve los redirects de Google News). Nada de enlaces intermedios."),
-    ("PDF oficial", "Genera el brief en PDF con la maqueta oficial de la marca: plantilla tokenizada, tokens de diseño (negro, fucsia, menta, Roboto) y Chrome headless. Siempre 1 página A4."),
+    ("PDF oficial", "Genera el brief en PDF con la maqueta editorial de la marca: papel crema, tinta, Hijos del Sol y Source Code Pro, sin recortes de texto. Siempre 1 página A4."),
     ("Archivo redundante", "Guarda PDF + HTML + historial estructurado (JSON y texto). El backup diario sube todo a GitHub a las 4 AM."),
     ("Publicación", "Un generador idempotente reconstruye este sitio desde el historial y lo publica en GitHub Pages: este dominio."),
     ("Entrega", "Envía el brief a WhatsApp con el resumen listo para leer y el PDF adjunto."),
